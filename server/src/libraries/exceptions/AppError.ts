@@ -8,10 +8,10 @@ export enum HttpCode {
 }
 
 interface AppErrorArgs {
-  name?: string;
-  httpCode: HttpCode;
-  description: string;
-  isTrusted?: boolean;
+  name?: string
+  httpCode: HttpCode
+  description: string
+  isTrusted?: boolean
 }
 
 export class AppError extends Error {
@@ -24,7 +24,7 @@ export class AppError extends Error {
 
     Object.setPrototypeOf(this, new.target.prototype);
 
-    this.name = args.name || 'Error';
+    this.name = args.name ?? 'Error';
     this.httpCode = args.httpCode;
 
     if (args.isTrusted !== undefined) {

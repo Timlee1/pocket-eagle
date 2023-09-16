@@ -1,24 +1,9 @@
-import express, { Express, Request, Response, NextFunction, Router } from "express";
-import { AppError, HttpCode } from '../../libraries/exceptions/AppError';
-import logger from '../../libraries/logger/logger';
+import express, { type Router } from 'express'
+import * as auth from './controllers/auth'
 
-const router: Router = express.Router();
+const router: Router = express.Router()
 
-router.get("/", (req: Request, res: Response) => {
-  res.send("TESTING");
-});
+router.route('/test').get(auth.test)
+router.route('/async').get(auth.asyncTest)
 
-router.get('/async', async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    throw new AppError({ httpCode: HttpCode.UNAUTHORIZED, description: 'You must be logged in' });
-  } catch (err) {
-    next(err)
-  }
-});
-
-router.get('/sync', async (req: Request, res: Response, next: NextFunction) => {
-  throw new Error('test');
-});
-
-export default router;
-
+export default router

@@ -1,14 +1,14 @@
-import "dotenv/config"
-import { CorsOptions } from 'cors'
+import 'dotenv/config'
+import { type CorsOptions } from 'cors'
 
-const allowedOrigins: string[] = process.env.ALLOWED_ORIGINS?.split(',') || []
+const allowedOrigins: string[] = process.env.ALLOWED_ORIGINS?.split(',') ?? []
 
-const corsOptions: CorsOptions = {
+export const corsOptions: CorsOptions = {
   origin: (origin, callback) => {
-    if (process.env.NODE_ENV == 'development' && !origin || allowedOrigins?.includes(origin!)) {
-      callback(null, true);
-    } else if (process.env.NODE_ENV == 'production' || allowedOrigins?.includes(origin!)) {
-      callback(null, true);
+    if (process.env.NODE_ENV === 'development' && (origin === undefined || allowedOrigins.includes(origin))) {
+      callback(null, true)
+    } else if (process.env.NODE_ENV === 'production' && (origin !== undefined && allowedOrigins.includes(origin))) {
+      callback(null, true)
     } else {
       callback(new Error('Not allowed by CORS'))
     }
@@ -16,5 +16,3 @@ const corsOptions: CorsOptions = {
   credentials: true,
   optionsSuccessStatus: 200
 }
-
-export default corsOptions

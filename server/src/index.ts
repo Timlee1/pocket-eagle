@@ -1,33 +1,26 @@
-import express, { Express, Request, Response, NextFunction } from "express";
-import "dotenv/config";
+import express, { type Express, type NextFunction, type Request, type Response } from 'express';
+import 'dotenv/config';
 import http from 'http';
-import cookieParser from "cookie-parser";
-import cors from "cors";
+import cookieParser from 'cookie-parser';
+import cors from 'cors';
+import pinoHTTP from 'pino-http';
 import { createHttpTerminator } from 'http-terminator';
-import corsOptions from "./config/corsOptions";
-import './libraries/exceptions/process';
 import { errorHandler } from './libraries/exceptions/ErrorHandler';
+import { corsOptions } from './config/corsOptions';
+import './libraries/exceptions/process';
+import logger from './libraries/logger/logger';
 import users from './features/users/routes';
-import pinoHTTP from 'pino-http'
-import logger from './libraries/logger/logger'
+import { type AppError } from './libraries/exceptions/AppError';
 
-
-const port = process.env.PORT || 3000;
+const port = process.env.PORT ?? 3000;
 
 const app: Express = express();
 
-//change logger to only log some attributes
-process.env.NODE_ENV === 'production' ? app.use(pinoHTTP({
-  logger,
-})) : app.use((req: Request, res: Response, next: NextFunction) => {
-  console.log(`${req.method} ${req.path}`)
-  next();
-});
+app.use(
+  pinoHTTP({ logger }));
 
 export const server = http.createServer(app);
-export const httpTerminator = createHttpTerminator({
-  server,
-});
+export const httpTerminator = createHttpTerminator({ server });
 
 app.use(cors(corsOptions));
 
@@ -37,10 +30,10 @@ app.use(cookieParser());
 
 app.use('/users', users);
 
-app.use((err: Error, req: Request, res: Response) => {
+app.use((err: Error | AppError, req: Request, res: Response, next: NextFunction) => { // must include next parameter
   errorHandler.handleError(err, res);
 });
 
 app.listen(port, () => {
-  console.log(`Listening on http://localhost:${port}/`)
+  console.log(`Listening on http://localhost:${port}/`);
 });

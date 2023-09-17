@@ -8,10 +8,10 @@ export enum HttpCode {
 }
 
 interface AppErrorArgs {
-  name?: string
-  httpCode: HttpCode
-  description: string
-  isTrusted?: boolean
+  name?: string;
+  httpCode: HttpCode;
+  description: string;
+  isTrusted?: boolean;
 }
 
 export class AppError extends Error {

@@ -4,7 +4,7 @@ module.exports = {
         "es2021": true,
         "node": true
     },
-    "extends": ["standard-with-typescript"],
+    "extends": ["standard-with-typescript", "prettier"],
     "overrides": [
         {
             "env": {
@@ -21,6 +21,7 @@ module.exports = {
     "parserOptions": {
         "ecmaVersion": "latest"
     },
+    "plugins": ["prettier"],
     "rules": {
         "@typescript-eslint/space-before-function-paren": "off",
         "@typescript-eslint/no-misused-promises":"off",

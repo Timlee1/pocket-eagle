@@ -1,18 +1,31 @@
-import 'dotenv/config'
-import { type CorsOptions } from 'cors'
+import 'dotenv/config';
+import { type CorsOptions } from 'cors';
+import { AppError, HttpCode } from '../libraries/exceptions/AppError';
 
-const allowedOrigins: string[] = process.env.ALLOWED_ORIGINS?.split(',') ?? []
+const allowedOrigins: string[] = process.env.ALLOWED_ORIGINS?.split(',') ?? [];
 
 export const corsOptions: CorsOptions = {
   origin: (origin, callback) => {
-    if (process.env.NODE_ENV === 'development' && (origin === undefined || allowedOrigins.includes(origin))) {
-      callback(null, true)
-    } else if (process.env.NODE_ENV === 'production' && (origin !== undefined && allowedOrigins.includes(origin))) {
-      callback(null, true)
+    if (
+      process.env.NODE_ENV === 'development' &&
+      (origin === undefined || allowedOrigins.includes(origin))
+    ) {
+      callback(null, true);
+    } else if (
+      process.env.NODE_ENV === 'production' &&
+      origin !== undefined &&
+      allowedOrigins.includes(origin)
+    ) {
+      callback(null, true);
     } else {
-      callback(new Error('Not allowed by CORS'))
+      callback(
+        new AppError({
+          httpCode: HttpCode.UNAUTHORIZED,
+          description: 'CORS Origin Not Allowed',
+        })
+      );
     }
   },
   credentials: true,
-  optionsSuccessStatus: 200
-}
+  optionsSuccessStatus: 200,
+};

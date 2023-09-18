@@ -1,13 +1,15 @@
 import { useRoutes } from "react-router-dom";
-
-// import { Landing } from '@/features/misc';
-// import { useAuth } from '@/lib/auth';
+import { useSelector } from "react-redux";
+import { useAuth } from "@/hooks/useAuth";
+import { selectUserToken } from "@/features/auth";
 
 import { protectedRoutes } from "./protected";
 // import { publicRoutes } from './public';
 
 export const AppRoutes = () => {
-  // const auth = useAuth();
+  useAuth();
+  const token = useSelector(selectUserToken);
+  console.log(token);
 
   // const commonRoutes = [{ path: "/", element: <Landing /> }];
 

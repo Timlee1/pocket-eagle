@@ -1,4 +1,9 @@
-import express, { type Express, type NextFunction, type Request, type Response } from 'express';
+import express, {
+  type Express,
+  type NextFunction,
+  type Request,
+  type Response,
+} from 'express';
 import 'dotenv/config';
 import http from 'http';
 import cookieParser from 'cookie-parser';
@@ -16,8 +21,8 @@ const port = process.env.PORT ?? 3000;
 
 const app: Express = express();
 
-app.use(
-  pinoHTTP({ logger }));
+// app.use(
+//   pinoHTTP({ logger }));
 
 export const server = http.createServer(app);
 export const httpTerminator = createHttpTerminator({ server });
@@ -30,9 +35,12 @@ app.use(cookieParser());
 
 app.use('/users', users);
 
-app.use((err: Error | AppError, req: Request, res: Response, next: NextFunction) => { // must include next parameter
-  errorHandler.handleError(err, res);
-});
+app.use(
+  (err: Error | AppError, req: Request, res: Response, next: NextFunction) => {
+    // must include next parameter
+    errorHandler.handleError(err, res);
+  }
+);
 
 app.listen(port, () => {
   console.log(`Listening on http://localhost:${port}/`);

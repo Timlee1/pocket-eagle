@@ -2,7 +2,16 @@ import { type Request, type Response, type NextFunction } from 'express';
 import { AppError, HttpCode } from '../../../libraries/exceptions/AppError';
 
 const test = (req: Request, res: Response): void => {
-  res.status(200).json({ test: 'test' });
+  try {
+    // console.log(req.headers.authorization);
+    if (req.headers.authorization === undefined) {
+      res.status(401).json({ test: 'test' });
+    } else {
+      res.status(200).json({ test: 'test' });
+    }
+  } catch (error) {
+    res.status(401).json({ test: 'test' });
+  }
 };
 
 const promise = Promise.resolve('value');

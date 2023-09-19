@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
 import { selectUserToken } from "@/features/auth";
 import { onAuthStateChanged } from "firebase/auth";
 import { logIn, logOut } from "@/features/auth";
 import { auth } from "@/config/firebase";
+import { useAppDispatch, useAppSelector } from "@/stores/hooks";
 
 export const useAuth = () => {
-  const dispatch = useDispatch();
-  const selector = useSelector(selectUserToken);
+  const dispatch = useAppDispatch();
+  const selector = useAppSelector(selectUserToken);
   const [userAuth, setUserAuth] = useState(selector);
 
   useEffect(() => {
@@ -22,7 +22,6 @@ export const useAuth = () => {
           .catch((e) => {
             console.log(e);
           });
-        // CHANGE THIS store use info
       } else {
         dispatch(logOut());
       }

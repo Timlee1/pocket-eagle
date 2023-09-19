@@ -2,32 +2,39 @@ import { useState } from "react";
 import { auth, googleProvider } from "@/config/firebase";
 import { createUserWithEmailAndPassword, signInWithPopup } from "firebase/auth";
 import { LogOutButton } from "./LogOutButton";
+import {
+  FireBaseAuthError,
+  isFirebaseAuthError,
+} from "../types/FirebaseAuthError";
 
 export const RegisterForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  //console.log(auth?.currentUser?.email);
 
   const handleEmailRegister = async () => {
     try {
-      const userCredential = await createUserWithEmailAndPassword(
-        auth,
-        email,
-        password,
-      );
-      //console.log(userCredential);
+      await createUserWithEmailAndPassword(auth, email, password);
     } catch (error) {
-      const errorCode = error.code;
-      const errorMessage = error.message;
+      if (isFirebaseAuthError(error)) {
+        const firebaseError = error as FireBaseAuthError;
+        const errorCode = firebaseError.code;
+        const errorMessage = firebaseError.message;
+        console.log(errorCode);
+        console.log(errorMessage);
+      }
     }
   };
   const handleGoogleRegister = async () => {
     try {
-      const userCredential = await signInWithPopup(auth, googleProvider);
-      //console.log(userCredential);
+      await signInWithPopup(auth, googleProvider);
     } catch (error) {
-      const errorCode = error.code;
-      const errorMessage = error.message;
+      if (isFirebaseAuthError(error)) {
+        const firebaseError = error as FireBaseAuthError;
+        const errorCode = firebaseError.code;
+        const errorMessage = firebaseError.message;
+        console.log(errorCode);
+        console.log(errorMessage);
+      }
     }
   };
 

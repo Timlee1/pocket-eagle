@@ -2,46 +2,49 @@ import { useState } from "react";
 import {
   signInWithEmailAndPassword,
   signInWithPopup,
-  GoogleAuthProvider,
+  // GoogleAuthProvider,
 } from "firebase/auth";
 import { auth, googleProvider } from "@/config/firebase";
 import { LogOutButton } from "./LogOutButton";
 import { Users } from "@/features/users";
+import {
+  FireBaseAuthError,
+  isFirebaseAuthError,
+} from "../types/FirebaseAuthError";
 
 export const LoginForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  // console.log(auth?.currentUser?.email);
 
   const handleEmailLogin = async () => {
     try {
-      const userCredential = await signInWithEmailAndPassword(
-        auth,
-        email,
-        password,
-      );
-
-      // console.log(userCredential);
+      await signInWithEmailAndPassword(auth, email, password);
     } catch (error) {
-      const errorCode = error.code;
-      const errorMessage = error.message;
+      if (isFirebaseAuthError(error)) {
+        const firebaseError = error as FireBaseAuthError;
+        const errorCode = firebaseError.code;
+        const errorMessage = firebaseError.message;
+        console.log(errorCode);
+        console.log(errorMessage);
+      }
     }
   };
   const handleGoogleLogin = async () => {
     try {
-      const result = await signInWithPopup(auth, googleProvider);
-      // console.log(result);
-      const credential = GoogleAuthProvider.credentialFromResult(result);
-      // console.log(credential);
-      const token = credential.accessToken;
-      // console.log(token);
-      const user = result.user;
-      // console.log(user);
+      await signInWithPopup(auth, googleProvider);
+      // const credential = GoogleAuthProvider.credentialFromResult(result);
+      // const token = credential.accessToken;
+      // const user = result.user;
     } catch (error) {
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      const email = error.customData.email;
-      const credential = GoogleAuthProvider.credentialFromError(error);
+      if (isFirebaseAuthError(error)) {
+        const firebaseError = error as FireBaseAuthError;
+        const errorCode = firebaseError.code;
+        const errorMessage = firebaseError.message;
+        //const email = error.customData.email;
+        // const credential = GoogleAuthProvider.credentialFromError(error);
+        console.log(errorCode);
+        console.log(errorMessage);
+      }
     }
   };
 

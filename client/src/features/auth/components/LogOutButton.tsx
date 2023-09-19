@@ -4,10 +4,10 @@ import { signOut } from "firebase/auth";
 export const LogOutButton = () => {
   const handleLogOut = async () => {
     try {
-      const result = await signOut(auth);
+      await signOut(auth);
       //console.log(result);
     } catch (error) {
-      //console.log(error);
+      console.log(error);
     }
   };
   return <button onClick={handleLogOut}>Logout</button>;

@@ -1,8 +1,10 @@
 import { type Request, type Response, type NextFunction } from 'express';
 import { AppError, HttpCode } from '../../../libraries/exceptions/AppError';
+import { type IRequest } from '../../../libraries/types';
 
-const test = (req: Request, res: Response): void => {
+export const test = (req: IRequest, res: Response): void => {
   try {
+    console.log(req.uid);
     // console.log(req.headers.authorization);
     if (req.headers.authorization === undefined) {
       res.status(401).json({ test: 'test' });
@@ -16,7 +18,7 @@ const test = (req: Request, res: Response): void => {
 
 const promise = Promise.resolve('value');
 
-const asyncTest = async (
+export const asyncTest = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -34,5 +36,3 @@ const asyncTest = async (
     next(err);
   }
 };
-
-export { test, asyncTest };

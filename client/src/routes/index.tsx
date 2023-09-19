@@ -9,7 +9,7 @@ import { protectedRoutes } from "./protected";
 export const AppRoutes = () => {
   useAuth();
   const token = useSelector(selectUserToken);
-  console.log(token);
+  // console.log(token);
 
   // const commonRoutes = [{ path: "/", element: <Landing /> }];
 

@@ -8,14 +8,14 @@ import 'dotenv/config';
 import http from 'http';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
-import pinoHTTP from 'pino-http';
+// import pinoHTTP from 'pino-http';
+// import logger from './libraries/logger/logger';
 import { createHttpTerminator } from 'http-terminator';
 import { errorHandler } from './libraries/exceptions/ErrorHandler';
 import { corsOptions } from './config/corsOptions';
 import './libraries/exceptions/process';
-import logger from './libraries/logger/logger';
-import users from './features/users/routes';
 import { type AppError } from './libraries/exceptions/AppError';
+import auth from './features/auth/routes';
 
 const port = process.env.PORT ?? 3000;
 
@@ -33,11 +33,11 @@ app.use(express.json());
 
 app.use(cookieParser());
 
-app.use('/users', users);
+app.use('/auth', auth);
 
 app.use(
   (err: Error | AppError, req: Request, res: Response, next: NextFunction) => {
-    // must include next parameter
+    console.log('here 4');
     errorHandler.handleError(err, res);
   }
 );

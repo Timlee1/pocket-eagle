@@ -23,9 +23,9 @@ module.exports = {
     },
     "plugins": ["prettier"],
     "rules": {
-        "@typescript-eslint/space-before-function-paren": "off",
         "@typescript-eslint/no-misused-promises":"off",
         "@typescript-eslint/semi": "off",
+        "@typescript-eslint/consistent-type-definitions":"off",
         "semi": [2, "always"]
     }
 }

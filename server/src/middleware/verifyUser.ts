@@ -1,24 +1,51 @@
-import { type NextFunction, type Request, type Response } from 'express';
+import { type NextFunction, type Response } from 'express';
 import { admin } from '../config/firebase';
+import { AppError, HttpCode } from '../libraries/exceptions/AppError';
+import { type IRequest } from '../libraries/types';
 
-const verifyUser = async (req: Request, res: Response, next: NextFunction) => {
-  const authHeader: string | undefined = req.headers.authorization;
-  if (!authHeader?.startsWith('Bearer ')) {
-    return res.status(401).json({ message: 'Unauthorized' });
-  }
+type AuthValues = { uid: string } | undefined;
 
-  const token = authHeader.split(' ')[1];
-  // console.log(token);
-
+const verifyUser: (
+  req: IRequest,
+  res: Response,
+  next: NextFunction
+) => Promise<void> = async (
+  req: IRequest,
+  res: Response,
+  next: NextFunction
+) => {
   try {
-    const decodeValue = await admin.auth().verifyIdToken(token);
-    console.log(decodeValue);
-    if (decodeValue) {
-      return next();
+    const authHeader: string | undefined = req.headers?.authorization;
+    if (authHeader === null || authHeader === undefined) {
+      throw new AppError({
+        httpCode: HttpCode.UNAUTHORIZED,
+        description: 'Unable to authorize',
+      });
+    } else if (!authHeader.startsWith('Bearer ')) {
+      throw new AppError({
+        httpCode: HttpCode.UNAUTHORIZED,
+        description: 'Unable to authorize',
+      });
     }
-    return res.status(401).json({ message: 'Unauthorized' });
-  } catch (error) {
-    return res.json({ message: 'Internal Error' });
+    const token: string | undefined = authHeader.split(' ')[1];
+    if (token === undefined || token === null) {
+      throw new AppError({
+        httpCode: HttpCode.UNAUTHORIZED,
+        description: 'Unable to authorize',
+      });
+    }
+    const decodedValues: AuthValues = await admin.auth().verifyIdToken(token);
+    if (decodedValues === undefined || decodedValues === null) {
+      throw new AppError({
+        httpCode: HttpCode.UNAUTHORIZED,
+        description: 'Unable to authorize',
+      });
+    } else {
+      req.uid = decodedValues.uid;
+      next();
+    }
+  } catch (err) {
+    next(err);
   }
 };
 

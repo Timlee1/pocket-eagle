@@ -28,7 +28,7 @@ const baseQueryWithRetry = async (
     setTimeout(async () => {
       // delayed for 200 ms
       result = await baseQuery(args, api, extraOptions);
-    }, 200);
+    }, 2000);
   }
   return result;
 };

@@ -15,7 +15,7 @@ import { errorHandler } from './libraries/exceptions/ErrorHandler';
 import { corsOptions } from './config/corsOptions';
 import './libraries/exceptions/process';
 import { type AppError } from './libraries/exceptions/AppError';
-import auth from './features/auth/routes';
+import auth from '@/features/auth/routes';
 
 const port = process.env.PORT ?? 3000;
 
@@ -37,7 +37,6 @@ app.use('/auth', auth);
 
 app.use(
   (err: Error | AppError, req: Request, res: Response, next: NextFunction) => {
-    console.log('here 4');
     errorHandler.handleError(err, res);
   }
 );

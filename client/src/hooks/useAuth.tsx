@@ -16,7 +16,6 @@ export const useAuth = () => {
         userAuth
           .getIdToken(true)
           .then((token) => {
-            // console.log(token);
             dispatch(logIn(token));
           })
           .catch((e) => {
@@ -25,8 +24,8 @@ export const useAuth = () => {
       } else {
         dispatch(logOut());
       }
+      // setIsLoaded(true);
     });
   }, []);
-
   return [userAuth, setUserAuth];
 };

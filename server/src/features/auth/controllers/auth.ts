@@ -1,11 +1,10 @@
 import { type Request, type Response, type NextFunction } from 'express';
 import { AppError, HttpCode } from '../../../libraries/exceptions/AppError';
-import { type IRequest } from '../../../libraries/types';
+// import { type IRequest } from '../../../libraries/types';
+import { type IRequest } from '@/libraries/types';
 
 export const test = (req: IRequest, res: Response): void => {
   try {
-    console.log(req.uid);
-    // console.log(req.headers.authorization);
     if (req.headers.authorization === undefined) {
       res.status(401).json({ test: 'test' });
     } else {

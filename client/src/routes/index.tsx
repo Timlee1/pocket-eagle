@@ -4,20 +4,19 @@ import { useAuth } from "@/hooks/useAuth";
 import { selectUserToken } from "@/features/auth";
 
 import { protectedRoutes } from "./protected";
-// import { publicRoutes } from './public';
+import { publicRoutes } from "./public";
 
 export const AppRoutes = () => {
   useAuth();
   const token = useAppSelector(selectUserToken);
+  const protectedRoutesUsed = useRoutes([...protectedRoutes]);
+  const publicRoutesUsed = useRoutes([...publicRoutes]);
   console.log(token);
-
-  // const commonRoutes = [{ path: "/", element: <Landing /> }];
-
-  // const routes = auth.user ? protectedRoutes : publicRoutes;
-
-  // const element = useRoutes([...routes, ...commonRoutes]);
-
-  const element = useRoutes([...protectedRoutes]);
-
-  return <>{element}</>;
+  if (token) {
+    console.log("protected");
+    return <>{protectedRoutesUsed}</>;
+  } else {
+    console.log("public");
+    return <>{publicRoutesUsed}</>;
+  }
 };

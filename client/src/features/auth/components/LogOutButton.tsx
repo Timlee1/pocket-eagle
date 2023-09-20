@@ -5,7 +5,6 @@ export const LogOutButton = () => {
   const handleLogOut = async () => {
     try {
       await signOut(auth);
-      //console.log(result);
     } catch (error) {
       console.log(error);
     }

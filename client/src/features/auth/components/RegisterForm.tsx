@@ -1,6 +1,10 @@
 import { useState } from "react";
 import { auth, googleProvider } from "@/config/firebase";
-import { createUserWithEmailAndPassword, signInWithPopup } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  sendEmailVerification,
+  signInWithPopup,
+} from "firebase/auth";
 import { LogOutButton } from "./LogOutButton";
 import {
   FireBaseAuthError,
@@ -14,6 +18,9 @@ export const RegisterForm = () => {
   const handleEmailRegister = async () => {
     try {
       await createUserWithEmailAndPassword(auth, email, password);
+      if (auth.currentUser != null) {
+        await sendEmailVerification(auth.currentUser);
+      }
     } catch (error) {
       if (isFirebaseAuthError(error)) {
         const firebaseError = error as FireBaseAuthError;
@@ -40,9 +47,9 @@ export const RegisterForm = () => {
 
   return (
     <>
-      <label htmlFor="email">Email</label>
+      <label htmlFor="email">Email:</label>
       <input id="email" onChange={(e) => setEmail(e.target.value)}></input>
-      <label htmlFor="password">Password</label>
+      <label htmlFor="password">Password:</label>
       <input
         id="password"
         onChange={(e) => setPassword(e.target.value)}

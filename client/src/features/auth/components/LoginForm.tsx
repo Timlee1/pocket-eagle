@@ -18,7 +18,11 @@ export const LoginForm = () => {
 
   const handleEmailLogin = async () => {
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+      const result = await signInWithEmailAndPassword(auth, email, password);
+      // console.log(result.user.emailVerified);
+      if (!result.user.emailVerified) {
+        console.log("Email Not Verified");
+      }
     } catch (error) {
       if (isFirebaseAuthError(error)) {
         const firebaseError = error as FireBaseAuthError;
@@ -35,6 +39,7 @@ export const LoginForm = () => {
       // const credential = GoogleAuthProvider.credentialFromResult(result);
       // const token = credential.accessToken;
       // const user = result.user;
+      // console.log(user);
     } catch (error) {
       if (isFirebaseAuthError(error)) {
         const firebaseError = error as FireBaseAuthError;

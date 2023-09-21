@@ -1,31 +1,69 @@
 import { useState, useEffect } from "react";
-import { selectUserToken } from "@/features/auth";
 import { onAuthStateChanged } from "firebase/auth";
-import { logIn, logOut } from "@/features/auth";
 import { auth } from "@/config/firebase";
-import { useAppDispatch, useAppSelector } from "@/stores/hooks";
+import { useAppDispatch } from "@/stores/hooks";
+import { logIn, logOut } from "@/features/auth";
+import { type User } from "@/features/users";
+
+type AuthState = { authenticated: boolean; initializing: boolean };
 
 export const useAuth = () => {
   const dispatch = useAppDispatch();
-  const selector = useAppSelector(selectUserToken);
-  const [userAuth, setUserAuth] = useState(selector);
+  const [authState, setAuthState] = useState<AuthState>({
+    authenticated: false,
+    initializing: true,
+  });
+  const [user, setUser] = useState<User>(undefined);
+
+  const updatedSuccessfulAuth = {
+    authenticated: true,
+    initializing: false,
+  };
+  const updatedFailedAuth = {
+    authenticated: false,
+    initializing: false,
+  };
 
   useEffect(() => {
-    onAuthStateChanged(auth, (userAuth) => {
-      if (userAuth) {
-        userAuth
-          .getIdToken(true)
-          .then((token) => {
-            dispatch(logIn(token));
-          })
-          .catch((e) => {
-            console.log(e);
-          });
-      } else {
+    onAuthStateChanged(auth, async (userAuth) => {
+      try {
+        if (userAuth && userAuth.email) {
+          //&& userAuth.emailVerified
+          const token = await userAuth.getIdToken(true);
+          dispatch(logIn(token));
+          setAuthState((prevState) => ({
+            ...prevState,
+            ...updatedSuccessfulAuth,
+          }));
+          const authProvider = userAuth.providerData[0].providerId;
+          if (authProvider === "password" || authProvider === "google.com") {
+            const updatedUser: User = {
+              email: userAuth.email,
+              authProvider: authProvider,
+            };
+            setUser((prevState) => ({
+              ...prevState,
+              ...updatedUser,
+            }));
+          }
+        } else {
+          dispatch(logOut());
+          setAuthState((prevState) => ({
+            ...prevState,
+            ...updatedFailedAuth,
+          }));
+          setUser(undefined);
+        }
+      } catch (e) {
         dispatch(logOut());
+        setAuthState((prevState) => ({
+          ...prevState,
+          ...updatedFailedAuth,
+        }));
+        setUser(undefined);
       }
-      // setIsLoaded(true);
     });
-  }, []);
-  return [userAuth, setUserAuth];
+  }, [setAuthState]);
+
+  return { authState, user };
 };

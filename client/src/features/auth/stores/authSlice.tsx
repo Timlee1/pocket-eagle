@@ -25,4 +25,4 @@ export const authSlice = createSlice({
 
 export const { logIn, logOut } = authSlice.actions;
 
-export const selectUserToken = (state: RootState) => state.auth.token; //TYPE for user
+export const selectUserToken = (state: RootState) => state.auth.token;

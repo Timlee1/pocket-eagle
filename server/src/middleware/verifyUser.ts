@@ -16,26 +16,27 @@ const verifyUser: (
 ) => {
   try {
     const authHeader: string | undefined = req.headers?.authorization;
-    if (authHeader === null || authHeader === undefined) {
+    if (authHeader == null) {
       throw new AppError({
         httpCode: HttpCode.UNAUTHORIZED,
         description: 'Unable to authorize',
       });
-    } else if (!authHeader.startsWith('Bearer ')) {
+    }
+    if (!authHeader.startsWith('Bearer ')) {
       throw new AppError({
         httpCode: HttpCode.UNAUTHORIZED,
         description: 'Unable to authorize',
       });
     }
     const token: string | undefined = authHeader.split(' ')[1];
-    if (token === undefined || token === null) {
+    if (token == null) {
       throw new AppError({
         httpCode: HttpCode.UNAUTHORIZED,
         description: 'Unable to authorize',
       });
     }
     const decodedValues: AuthValues = await admin.auth().verifyIdToken(token);
-    if (decodedValues === undefined || decodedValues === null) {
+    if (decodedValues == null) {
       throw new AppError({
         httpCode: HttpCode.UNAUTHORIZED,
         description: 'Unable to authorize',

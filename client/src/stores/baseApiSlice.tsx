@@ -26,7 +26,7 @@ const baseQueryWithRetry = async (
   let result = await baseQuery(args, api, extraOptions);
   if (result?.error?.status === 401) {
     setTimeout(async () => {
-      // delayed for 200 ms
+      // delayed for 2s to wait for firebase auth
       result = await baseQuery(args, api, extraOptions);
     }, 2000);
   }

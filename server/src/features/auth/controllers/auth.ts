@@ -1,13 +1,15 @@
 import { type Request, type Response, type NextFunction } from 'express';
-import { AppError, HttpCode } from '../../../libraries/exceptions/AppError';
-// import { type IRequest } from '../../../libraries/types';
+import db from '@/config/db';
+import { AppError, HttpCode } from '@/libraries/exceptions/AppError';
 import { type IRequest } from '@/libraries/types';
 
-export const test = (req: IRequest, res: Response): void => {
+export const test = async (req: IRequest, res: Response): Promise<void> => {
   try {
     if (req.headers.authorization === undefined) {
       res.status(401).json({ test: 'test' });
     } else {
+      const { rows } = await db.query('SELECT * FROM customer');
+      console.log(rows);
       res.status(200).json({ test: 'test' });
     }
   } catch (error) {

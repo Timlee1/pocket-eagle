@@ -42,7 +42,7 @@ const verifyUser: (
         description: 'Unable to authorize',
       });
     } else {
-      req.uid = decodedValues.uid;
+      req.firebaseUid = decodedValues.uid;
       next();
     }
   } catch (err) {

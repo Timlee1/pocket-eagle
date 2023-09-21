@@ -25,7 +25,7 @@ export const useAuth = () => {
   };
 
   useEffect(() => {
-    onAuthStateChanged(auth, async (userAuth) => {
+    const listener = onAuthStateChanged(auth, async (userAuth) => {
       try {
         if (userAuth && userAuth.email) {
           //&& userAuth.emailVerified
@@ -63,7 +63,10 @@ export const useAuth = () => {
         setUser(undefined);
       }
     });
-  }, [setAuthState]);
+    return () => {
+      listener();
+    };
+  }, [auth]);
 
   return { authState, user };
 };

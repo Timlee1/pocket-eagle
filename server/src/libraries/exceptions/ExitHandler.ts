@@ -1,4 +1,5 @@
 import { httpTerminator, server } from '../../index';
+import db from '@/config/db';
 
 class ExitHandler {
   public async handleExit(code: number, timeout = 5000): Promise<void> {
@@ -11,6 +12,7 @@ class ExitHandler {
       }, timeout).unref();
 
       // terminate other things like database
+      await db.pool.end();
 
       if (server.listening) {
         console.log('Terminating HTTP connections');

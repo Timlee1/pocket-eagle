@@ -16,6 +16,7 @@ import { corsOptions } from './config/corsOptions';
 import './libraries/exceptions/process';
 import { type AppError } from './libraries/exceptions/AppError';
 import auth from '@/features/auth/routes';
+import payment from '@/features/payment/routes';
 
 const port = process.env.PORT ?? 3000;
 
@@ -27,6 +28,8 @@ const app: Express = express();
 export const server = http.createServer(app);
 export const httpTerminator = createHttpTerminator({ server });
 
+app.use('/stripe', express.raw({ type: 'application/json' }), payment);
+
 app.use(cors(corsOptions));
 
 app.use(express.json());
@@ -34,6 +37,8 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.use('/auth', auth);
+
+app.use('/payment', payment);
 
 app.use(
   (err: Error | AppError, req: Request, res: Response, next: NextFunction) => {

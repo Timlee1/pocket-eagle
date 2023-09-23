@@ -1,8 +1,8 @@
 import { apiSlice } from "../../../stores/baseApiSlice";
 
 const getUsers = apiSlice.injectEndpoints({
-  endpoints: (build) => ({
-    getUsers: build.query<any, void>({
+  endpoints: (builder) => ({
+    getUsers: builder.query<any, void>({
       query: () => "/auth/test",
     }),
   }),

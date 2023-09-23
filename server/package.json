@@ -6,12 +6,22 @@
   "_moduleAliases": {
     "@": "dist"
   },
+  "nodemonConfig": {
+    "ignore": [
+      "node_modules"
+    ],
+    "watch": [
+      "src"
+    ],
+    "exec": "node -r tsconfig-paths/register -r ts-node/register ./src/index.ts",
+    "ext": "ts, js"
+  },
   "scripts": {
     "build": "rimraf dist && npx tsc",
     "prestart": "npm run build",
     "start": "node -r module-alias/register dist/index.js",
     "predev": "npm run build",
-    "dev": "nodemon -r module-alias/register dist/index.js"
+    "dev": "nodemon"
   },
   "keywords": [],
   "author": "",
@@ -28,7 +38,8 @@
     "pg": "^8.11.3",
     "pino": "^8.15.1",
     "pino-http": "^8.5.0",
-    "rimraf": "^5.0.1"
+    "rimraf": "^5.0.1",
+    "stripe": "^13.7.0"
   },
   "devDependencies": {
     "@types/cookie-parser": "^1.4.4",
@@ -50,6 +61,8 @@
     "install": "^0.13.0",
     "nodemon": "^3.0.1",
     "prettier": "^3.0.3",
+    "ts-node": "^10.9.1",
+    "tsconfig-paths": "^4.2.0",
     "typescript": "^5.2.2"
   }
 }

@@ -3,13 +3,13 @@ import db from '@/config/db';
 import { AppError, HttpCode } from '@/libraries/exceptions/AppError';
 import { type IRequest } from '@/libraries/types';
 
-export const test = async (req: IRequest, res: Response): Promise<void> => {
+export const test = async (req: IRequest, res: Response) => {
   try {
     if (req.headers.authorization === undefined) {
       res.status(401).json({ test: 'test' });
     } else {
-      const { rows } = await db.query('SELECT * FROM customer');
-      console.log(rows);
+      // const { rows } = await db.query('SELECT * FROM customer');
+      // console.log(rows);
       res.status(200).json({ test: 'test' });
     }
   } catch (error) {

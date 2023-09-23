@@ -1,5 +1,3 @@
-
-
 const config = {
   trailingComma: "es5",
   tabWidth: 2,

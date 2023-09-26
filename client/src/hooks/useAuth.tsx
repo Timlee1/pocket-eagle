@@ -27,8 +27,7 @@ export const useAuth = () => {
   useEffect(() => {
     const listener = onAuthStateChanged(auth, async (userAuth) => {
       try {
-        if (userAuth && userAuth.email) {
-          //&& userAuth.emailVerified
+        if (userAuth && userAuth.email && userAuth.emailVerified) {
           const token = await userAuth.getIdToken(true);
           dispatch(logIn(token));
           setAuthState((prevState) => ({

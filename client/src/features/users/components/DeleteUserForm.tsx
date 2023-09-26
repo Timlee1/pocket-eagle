@@ -10,7 +10,7 @@ import { useAuth } from "@/hooks/useAuth";
 export const DeleteUserForm = () => {
   const [password, setPassword] = useState("");
   const { user } = useAuth();
-
+  const [message, setMessage] = useState("");
   const handleDeleteUser = async () => {
     try {
       const firebaseUser = auth.currentUser;
@@ -32,8 +32,9 @@ export const DeleteUserForm = () => {
       ) {
         await deleteUser(firebaseUser);
       }
+      setMessage("User was deleted");
     } catch (error) {
-      console.log(error);
+      setMessage("User was unable to be deleted");
     }
   };
 
@@ -45,6 +46,7 @@ export const DeleteUserForm = () => {
         onChange={(e) => setPassword(e.target.value)}
       ></input>
       <button onClick={handleDeleteUser}>Delete User</button>
+      {message && <p>{message}</p>}
     </>
   );
 };

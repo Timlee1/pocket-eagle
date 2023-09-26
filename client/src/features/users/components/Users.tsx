@@ -13,7 +13,7 @@ export const Users = () => {
   //   res = await useGetUsersQuery();
   // };
   if (isSuccess) {
-    console.log(data);
+    //console.log(data);
     return <div>Yay</div>;
   }
 

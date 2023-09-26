@@ -11,6 +11,7 @@ export const UpdatePasswordForm = () => {
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const { user } = useAuth();
+  const [message, setMessage] = useState("");
 
   const handleUpdatePassword = async () => {
     try {
@@ -22,9 +23,10 @@ export const UpdatePasswordForm = () => {
         );
         await reauthenticateWithCredential(user, credential);
         await updatePassword(user, newPassword);
+        setMessage("Password was changed");
       }
     } catch (error) {
-      console.log(error);
+      setMessage("Unable to change password");
     }
   };
   if (user?.authProvider === "password") {
@@ -41,6 +43,7 @@ export const UpdatePasswordForm = () => {
           onChange={(e) => setNewPassword(e.target.value)}
         ></input>
         <button onClick={handleUpdatePassword}>Submit</button>
+        {message && <p>{message}</p>}
       </>
     );
   }

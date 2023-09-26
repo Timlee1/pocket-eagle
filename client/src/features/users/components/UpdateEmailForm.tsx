@@ -11,6 +11,8 @@ export const UpdateEmailForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { user } = useAuth();
+  const [message, setMessage] = useState("");
+
   const handleUpdateEmail = async () => {
     try {
       const user = auth.currentUser;
@@ -18,9 +20,10 @@ export const UpdateEmailForm = () => {
         const credential = EmailAuthProvider.credential(user.email, password);
         await reauthenticateWithCredential(user, credential);
         await verifyBeforeUpdateEmail(user, email);
+        setMessage("Update email was sent");
       }
     } catch (error) {
-      console.log(error);
+      setMessage("Unable to send update email");
     }
   };
   if (user?.authProvider === "password") {
@@ -34,6 +37,7 @@ export const UpdateEmailForm = () => {
           onChange={(e) => setPassword(e.target.value)}
         ></input>
         <button onClick={handleUpdateEmail}>Submit</button>
+        {message && <p>{message}</p>}
       </>
     );
   }
